@@ -12,16 +12,7 @@ Usage: [statewrap-ref[channel-name]]
 
 "use strict";
 
-function getStatewrapContext(widget) {
-	var w = widget;
-	while(w) {
-		if(w.statewrapContext) {
-			return w.statewrapContext;
-		}
-		w = w.parentWidget;
-	}
-	return null;
-}
+var getStatewrapContext = require("$:/plugins/rimir/statewrap/modules/utils.js").getStatewrapContext;
 
 exports["statewrap-ref"] = function(source, operator, options) {
 	var channelName = operator.operand || "";

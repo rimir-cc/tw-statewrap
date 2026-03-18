@@ -14,17 +14,7 @@ Usage:
 "use strict";
 
 var Widget = require("$:/core/modules/widgets/widget.js").widget;
-
-function getStatewrapContext(widget) {
-	var w = widget;
-	while(w) {
-		if(w.statewrapContext) {
-			return w.statewrapContext;
-		}
-		w = w.parentWidget;
-	}
-	return null;
-}
+var getStatewrapContext = require("$:/plugins/rimir/statewrap/modules/utils.js").getStatewrapContext;
 
 var ActionStatewrapSet = function(parseTreeNode, options) {
 	this.initialise(parseTreeNode, options);
