@@ -1,0 +1,44 @@
+created: 20260317120000000
+modified: 20260317120000000
+rdt.hub-category: ui
+rdt.hub-category-name: UI
+rdt.hub-order: 1
+rdt.order: 1
+rdt.plugin-key: statewrap
+rdt.plugin-name: statewrap
+rdt.plugin-subtitle: Channel-based state management with reactive rules
+rdt.section: Overview
+title: $:/plugins/rimir/statewrap/doc/overview
+type: text/vnd.tiddlywiki
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/page">
+<$fill $name="body">
+
+!! What it does
+
+Provides named state channels as an abstraction over `$:/state/...` tiddlers. Views read and write logical channel names; the container widget manages the actual state tiddler paths internally. Reactive rules fire when channels change, enabling declarative state dependencies.
+
+!! Features
+
+* Named channels — views reference names like `selected-project`, not state tiddler paths
+* Reactive rules — declarative wikitext actions fire when a channel changes
+* Instance isolation — each `<$statewrap>` gets its own state namespace
+* Re-entry guard — rules cannot cascade (prevents infinite loops)
+* Filter operators — `[statewrap-get[channel]]` and `[statewrap-ref[channel]]`
+
+!! Prerequisites
+
+TiddlyWiki 5.3.0 or later.
+
+!! Quick start
+
+# Add `rimir/statewrap` to `tiddlywiki.info` plugins
+# Restart server
+# Use `<$statewrap>` in your tiddlers with channel definitions
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/callout" type="info">
+<$fill $name="body">JS modules require a server restart after installation. Config and template tiddlers are available immediately.</$fill>
+</$transclude>
+
+</$fill>
+</$transclude>

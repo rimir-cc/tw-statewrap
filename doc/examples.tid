@@ -1,0 +1,78 @@
+created: 20260317120000000
+modified: 20260317120000000
+rdt.hub-category: ui
+rdt.hub-category-name: UI
+rdt.hub-order: 1
+rdt.order: 4
+rdt.plugin-key: statewrap
+rdt.plugin-name: statewrap
+rdt.section: Examples
+title: $:/plugins/rimir/statewrap/doc/examples
+type: text/vnd.tiddlywiki
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/page">
+<$fill $name="body">
+
+!! Basic channel
+
+```
+<$statewrap channels="active-tab" default-active-tab="home" instid="ex1">
+  <$button><$action-statewrap-set channel="active-tab" value="home"/>Home</$button>
+  <$button><$action-statewrap-set channel="active-tab" value="settings"/>Settings</$button>
+
+  <$reveal stateTitle={{{[statewrap-ref[active-tab]]}}} type="match" text="home">
+    Home content
+  </$reveal>
+  <$reveal stateTitle={{{[statewrap-ref[active-tab]]}}} type="match" text="settings">
+    Settings content
+  </$reveal>
+</$statewrap>
+```
+
+!! Reactive rules — master/detail
+
+```
+<$statewrap channels="category item" instid="ex2">
+  <$statewrap-rule when="category">
+    <$action-statewrap-set channel="item" value=""/>
+  </$statewrap-rule>
+
+  <$list filter="Work Personal">
+    <$button>
+      <$action-statewrap-set channel="category" value=<<currentTiddler>>/>
+      <<currentTiddler>>
+    </$button>
+  </$list>
+
+  <%if [statewrap-get[category]!is[blank]]%>
+    Category: <$text text={{{[statewrap-get[category]]}}}/>
+  <%endif%>
+</$statewrap>
+```
+
+!! Reading values in filters
+
+```
+<%if [statewrap-get[selected-project]!is[blank]]%>
+  Project: <$text text={{{[statewrap-get[selected-project]]}}}/>
+<%endif%>
+```
+
+!! Using statewrap-ref with components
+
+`[statewrap-ref[channel]]` returns the state tiddler path, useful for widgets that expect a tiddler reference:
+
+```
+<$transclude $tiddler="$:/plugins/rimir/components/pills"
+  sync-tiddler={{{[statewrap-ref[active-tab]]}}}
+/>
+```
+
+!! Skipping rules with no-rules
+
+```
+<$action-statewrap-set channel="detail-tab" value="overview" no-rules="yes"/>
+```
+
+</$fill>
+</$transclude>

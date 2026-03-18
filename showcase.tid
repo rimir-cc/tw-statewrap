@@ -1,0 +1,98 @@
+created: 20260317120000000
+modified: 20260317120000000
+title: $:/plugins/rimir/statewrap/showcase
+type: text/vnd.tiddlywiki
+
+\define project-list() Alpha Bravo Charlie
+\define task-list-Alpha() Design Build
+\define task-list-Bravo() Research Plan Execute
+\define task-list-Charlie() Review Ship
+
+! Statewrap Showcase
+
+This demo shows three linked channels: selecting a project resets the task and detail tab. Selecting a task resets the detail tab.
+
+---
+
+<$statewrap channels="selected-project selected-task detail-tab"
+            default-detail-tab="overview" instid="showcase">
+
+<$statewrap-rule when="selected-project">
+  <$action-statewrap-set channel="selected-task" value=""/>
+  <$action-statewrap-set channel="detail-tab" value="overview"/>
+</$statewrap-rule>
+
+<$statewrap-rule when="selected-task">
+  <$action-statewrap-set channel="detail-tab" value="overview"/>
+</$statewrap-rule>
+
+!! Projects
+
+<$list filter="Alpha Bravo Charlie">
+  <$button>
+    <$action-statewrap-set channel="selected-project" value=<<currentTiddler>>/>
+    <<currentTiddler>>
+  </$button>
+  &nbsp;
+</$list>
+
+''Selected project:'' <$text text={{{[statewrap-get[selected-project]]}}}/>
+
+<%if [statewrap-get[selected-project]!is[blank]]%>
+
+!! Tasks for <$text text={{{[statewrap-get[selected-project]]}}}/>
+
+<$set name="proj" value={{{[statewrap-get[selected-project]]}}}>
+<$list filter="[<proj>addprefix[task-list-]getvariable[]enlist-input[]]" variable="task">
+  <$button>
+    <$action-statewrap-set channel="selected-task" value=<<task>>/>
+    <<task>>
+  </$button>
+  &nbsp;
+</$list>
+</$set>
+
+''Selected task:'' <$text text={{{[statewrap-get[selected-task]]}}}/>
+
+<%if [statewrap-get[selected-task]!is[blank]]%>
+
+!! Detail: <$text text={{{[statewrap-get[selected-task]]}}}/>
+
+<$button><$action-statewrap-set channel="detail-tab" value="overview"/>Overview</$button>
+<$button><$action-statewrap-set channel="detail-tab" value="notes"/>Notes</$button>
+<$button><$action-statewrap-set channel="detail-tab" value="history"/>History</$button>
+
+''Active tab:'' <$text text={{{[statewrap-get[detail-tab]]}}}/>
+
+<$reveal stateTitle={{{[statewrap-ref[detail-tab]]}}} type="match" text="overview">
+
+Overview content for <$text text={{{[statewrap-get[selected-task]]}}}/>.
+
+</$reveal>
+
+<$reveal stateTitle={{{[statewrap-ref[detail-tab]]}}} type="match" text="notes">
+
+Notes content for <$text text={{{[statewrap-get[selected-task]]}}}/>.
+
+</$reveal>
+
+<$reveal stateTitle={{{[statewrap-ref[detail-tab]]}}} type="match" text="history">
+
+History content for <$text text={{{[statewrap-get[selected-task]]}}}/>.
+
+</$reveal>
+
+<%endif%>
+
+<%endif%>
+
+</$statewrap>
+
+---
+
+!! Debug: State tiddler paths
+
+|!Channel |!Tiddler path |
+|selected-project |`$:/state/rimir/statewrap/showcase/selected-project` |
+|selected-task |`$:/state/rimir/statewrap/showcase/selected-task` |
+|detail-tab |`$:/state/rimir/statewrap/showcase/detail-tab` |

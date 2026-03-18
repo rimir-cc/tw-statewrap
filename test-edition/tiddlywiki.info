@@ -1,0 +1,11 @@
+{
+    "description": "Test edition for statewrap",
+    "plugins": [
+        "tiddlywiki/jasmine",
+        "rimir/statewrap"
+    ],
+    "themes": [
+        "tiddlywiki/vanilla",
+        "tiddlywiki/snowwhite"
+    ]
+}

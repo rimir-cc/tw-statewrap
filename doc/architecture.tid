@@ -1,0 +1,71 @@
+created: 20260317120000000
+modified: 20260317120000000
+rdt.hub-category: ui
+rdt.hub-category-name: UI
+rdt.hub-order: 1
+rdt.order: 2
+rdt.plugin-key: statewrap
+rdt.plugin-name: statewrap
+rdt.section: Architecture
+title: $:/plugins/rimir/statewrap/doc/architecture
+type: text/vnd.tiddlywiki
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/page">
+<$fill $name="body">
+
+!! Architecture
+
+!!! Widget tree & context
+
+`<$statewrap>` creates a `statewrapContext` object on its widget instance. All descendant widgets find this context by walking up the `parentWidget` chain — the same pattern used by json-dsl's `getJsonContext()`.
+
+```
+<$statewrap>                    ← creates statewrapContext
+  <$statewrap-rule>             ← registers in context.rules[]
+    <$action-statewrap-set>     ← rule's action children
+  </$statewrap-rule>
+  <$list>                       ← any depth of nesting
+    <$button>
+      <$action-statewrap-set>   ← finds context via parent walk
+    </$button>
+  </$list>
+</$statewrap>
+```
+
+!!! Context object
+
+```javascript
+{
+  prefix: "$:/state/rimir/statewrap/<instid>/",
+  channels: {
+    "channel-name": {
+      default: "",
+      tiddler: "$:/state/rimir/statewrap/<instid>/channel-name"
+    }
+  },
+  rules: [{ when: "channel-name", widget: <StatewrapRuleWidget> }],
+  wiki: $tw.wiki,
+  _applyingRules: false
+}
+```
+
+!!! Data flow
+
+# User clicks button containing `<$action-statewrap-set channel="X" value="V"/>`
+# Action widget walks parent chain to find `statewrapContext`
+# Looks up channel → gets state tiddler path
+# Writes value via `wiki.setText()`
+# Iterates `context.rules` — for each rule where `when === "X"`, calls `rule.widget.invokeRuleActions()`
+# Rule's child action widgets execute (e.g., clear another channel)
+# `_applyingRules` flag prevents nested rules from firing (single level only)
+
+!!! State tiddler naming
+
+```
+$:/state/rimir/statewrap/<instid>/<channel-name>
+```
+
+If `instid` is not provided, TW's `qualify` mechanism generates a unique ID based on the widget's position in the render tree.
+
+</$fill>
+</$transclude>

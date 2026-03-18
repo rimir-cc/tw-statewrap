@@ -1,0 +1,64 @@
+created: 20260317120000000
+modified: 20260317120000000
+rdt.hub-category: ui
+rdt.hub-category-name: UI
+rdt.hub-order: 1
+rdt.order: 5
+rdt.plugin-key: statewrap
+rdt.plugin-name: statewrap
+rdt.section: Reference
+title: $:/plugins/rimir/statewrap/doc/reference
+type: text/vnd.tiddlywiki
+
+<$transclude $tiddler="$:/plugins/rimir/doc-template/templates/page">
+<$fill $name="body">
+
+!! Widget reference
+
+!!! `<$statewrap>`
+
+|!Attribute |!Required |!Description |
+|`channels` |Yes |Space-separated channel names (`[a-z0-9-]`) |
+|`default-<name>` |No |Default value for channel `<name>`. Omitted channels default to `""` |
+|`instid` |No |Instance ID for state isolation. Defaults to TW `qualify` mechanism |
+
+!!! `<$statewrap-rule>`
+
+|!Attribute |!Required |!Description |
+|`when` |Yes |Channel name that triggers this rule's actions |
+
+Must be a direct child of `<$statewrap>`. Contains action widgets that execute when the named channel changes.
+
+!!! `<$action-statewrap-set>`
+
+|!Attribute |!Required |!Description |
+|`channel` |Yes |Channel name to write |
+|`value` |No |Value to set (defaults to `""`) |
+|`no-rules` |No |`"yes"` to skip reactive rules |
+
+!! Filter operator reference
+
+!!! `[statewrap-get[channel]]`
+
+Returns the text value of the named channel's state tiddler. Returns empty if channel not found or no context.
+
+!!! `[statewrap-ref[channel]]`
+
+Returns the state tiddler title (path) for the named channel. Useful for widgets that need a tiddler reference (e.g., `$reveal stateTitle`).
+
+!! State tiddler path format
+
+```
+$:/state/rimir/statewrap/<instid>/<channel-name>
+```
+
+!! Edge cases
+
+* ''Missing context'' — action widget and filter operators silently no-op if no `<$statewrap>` ancestor exists
+* ''Unknown channel'' — logs a console warning, no-op
+* ''No cascading'' — `_applyingRules` flag prevents rules from triggering further rules
+* ''Shared instid'' — two `<$statewrap>` with the same `instid` share state tiddlers (intentional for cross-widget communication)
+* ''Nested statewrap'' — child widgets find the nearest ancestor context
+
+</$fill>
+</$transclude>

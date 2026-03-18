@@ -1,0 +1,8 @@
+created: 20260317120000000
+modified: 20260317120000000
+title: $:/plugins/rimir/statewrap/settings
+type: text/vnd.tiddlywiki
+
+<div class="rr-settings-info-card">
+No configurable settings. State channels are defined per-instance via the `<$statewrap>` widget attributes.
+</div>
