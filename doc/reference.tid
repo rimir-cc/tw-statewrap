@@ -27,7 +27,7 @@ type: text/vnd.tiddlywiki
 |!Attribute |!Required |!Description |
 |`when` |Yes |Channel name that triggers this rule's actions |
 
-Must be a direct child of `<$statewrap>`. Contains action widgets that execute when the named channel changes.
+Must be a descendant of `<$statewrap>` (any nesting depth). Contains action widgets that execute when the named channel changes.
 
 !!! `<$action-statewrap-set>`
 
