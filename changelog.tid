@@ -6,4 +6,5 @@ type: text/vnd.tiddlywiki
 ! Changelog
 
 |!Version |!Date |!Changes |
+|0.1.1 |2026-04-07 |Cleanup: replace \define with \procedure in showcase |
 |v0.1.0 |2026-03-17 |Initial release: container widget, rule widget, action widget, filter operators, showcase |

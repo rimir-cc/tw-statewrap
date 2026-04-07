@@ -3,10 +3,10 @@ modified: 20260317120000000
 title: $:/plugins/rimir/statewrap/showcase
 type: text/vnd.tiddlywiki
 
-\define project-list() Alpha Bravo Charlie
-\define task-list-Alpha() Design Build
-\define task-list-Bravo() Research Plan Execute
-\define task-list-Charlie() Review Ship
+\procedure project-list() Alpha Bravo Charlie
+\procedure task-list-Alpha() Design Build
+\procedure task-list-Bravo() Research Plan Execute
+\procedure task-list-Charlie() Review Ship
 
 ! Statewrap Showcase
 
