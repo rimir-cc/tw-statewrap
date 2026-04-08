@@ -33,18 +33,23 @@ StatewrapRuleWidget.prototype.render = function(parent, nextSibling) {
 };
 
 StatewrapRuleWidget.prototype.execute = function() {
-	this.whenChannel = this.getAttribute("when", "");
+	var whenAttr = this.getAttribute("when", "");
+	this.whenChannels = whenAttr.split(/\s+/).filter(function(name) {
+		return name.length > 0;
+	});
 
 	// Build child widgets (the action widgets)
 	this.makeChildWidgets();
 
-	// Register with parent context
+	// Register with parent context — one entry per channel
 	var ctx = getStatewrapContext(this);
-	if(ctx && this.whenChannel) {
-		ctx.rules.push({
-			when: this.whenChannel,
-			widget: this
-		});
+	if(ctx) {
+		for(var i = 0; i < this.whenChannels.length; i++) {
+			ctx.rules.push({
+				when: this.whenChannels[i],
+				widget: this
+			});
+		}
 	}
 };
 

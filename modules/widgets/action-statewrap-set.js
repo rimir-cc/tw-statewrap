@@ -69,16 +69,16 @@ ActionStatewrapSet.prototype.invokeAction = function(triggeringWidget, event) {
 	// Write new value
 	ctx.wiki.setText(tiddlerPath, "text", null, newValue);
 
-	// Trigger matching rules unless suppressed or already applying
-	if(this.noRules !== "yes" && !ctx._applyingRules) {
-		ctx._applyingRules = true;
+	// Trigger matching rules unless suppressed or max depth reached
+	if(this.noRules !== "yes" && ctx._ruleDepth < 10) {
+		ctx._ruleDepth++;
 		for(var i = 0; i < ctx.rules.length; i++) {
 			var rule = ctx.rules[i];
 			if(rule.when === channelName) {
 				rule.widget.invokeRuleActions();
 			}
 		}
-		ctx._applyingRules = false;
+		ctx._ruleDepth--;
 	}
 
 	return true;

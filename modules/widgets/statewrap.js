@@ -62,7 +62,7 @@ StatewrapWidget.prototype.execute = function() {
 		channels: channels,
 		rules: [],
 		wiki: this.wiki,
-		_applyingRules: false
+		_ruleDepth: 0
 	};
 
 	// Initialize state tiddlers with defaults if they don't exist
