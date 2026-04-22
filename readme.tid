@@ -13,7 +13,7 @@ Channel-based state management for TiddlyWiki. Define named state channels in a 
 * ''Reactive rules'' — declarative wikitext actions fire when a channel changes (e.g., "when project changes, clear task selection")
 * ''Instance isolation'' — each `<$statewrap>` gets its own state namespace via `instid` or TW's qualify mechanism
 * ''Re-entry guard'' — rules cannot cascade (a rule's actions won't trigger further rules)
-* ''Filter operators'' — `[statewrap-get[channel]]` reads value, `[statewrap-ref[channel]]` returns state tiddler path
+* ''Filter operators'' — `[statewrap-get[channel]]` reads value, `[statewrap-ref[channel]]` returns state tiddler path, `[<instid>statewrap-lookup[channel]]` reads a channel's value without needing a parent `<$statewrap>` scope (for use in `\function` bodies, detached rendering, and introspection tools)
 
 !! Quick start
 
@@ -37,8 +37,9 @@ Channel-based state management for TiddlyWiki. Define named state channels in a 
 |Container widget |`<$statewrap>` |Defines channels, defaults; establishes context |
 |Rule widget |`<$statewrap-rule>` |Declares reactive wikitext actions for a channel change |
 |Action widget |`<$action-statewrap-set>` |Write to a channel by name |
-|Filter operator |`[statewrap-get[channel]]` |Read a channel's current value |
-|Filter operator |`[statewrap-ref[channel]]` |Get a channel's state tiddler path |
+|Filter operator |`[statewrap-get[channel]]` |Read a channel's current value (requires ancestor `<$statewrap>`) |
+|Filter operator |`[statewrap-ref[channel]]` |Get a channel's state tiddler path (requires ancestor `<$statewrap>`) |
+|Filter operator |`[<instid>statewrap-lookup[channel]]` |Tree-independent channel read — takes the instid as filter input, so it works outside statewrap scope |
 
 !! Prerequisites
 

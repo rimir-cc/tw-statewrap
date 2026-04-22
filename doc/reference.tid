@@ -40,11 +40,24 @@ Must be a descendant of `<$statewrap>` (any nesting depth). Contains action widg
 
 !!! `[statewrap-get[channel]]`
 
-Returns the text value of the named channel's state tiddler. Returns empty if channel not found or no context.
+Returns the text value of the named channel's state tiddler. Requires a `<$statewrap>` ancestor (the operator walks up the widget tree to find the statewrap context). Returns empty if channel not found or no context.
 
 !!! `[statewrap-ref[channel]]`
 
-Returns the state tiddler title (path) for the named channel. Useful for widgets that need a tiddler reference (e.g., `$reveal stateTitle`).
+Returns the state tiddler title (path) for the named channel. Requires a `<$statewrap>` ancestor. Useful for widgets that need a tiddler reference (e.g., `$reveal stateTitle`).
+
+!!! `[<instid>statewrap-lookup[channel]]`
+
+Tree-independent read: takes the statewrap `instid` as filter input and the channel name as operand. Reads the state tiddler at `$:/state/rimir/statewrap/<instid>/<channel>` directly — no widget-tree walk, no parent `<$statewrap>` required.
+
+Use this when `statewrap-get` can't work:
+
+* Inside `\function` bodies (see the ''tw-function-fake-widget'' gotcha — `\function` runs on a fake widget without `parentWidget`)
+* In the LLM chat's system-prompt template, which is wikified outside the app's statewrap scope
+* In detached rendering (e.g., the `wikitext_render` llm-connect tool) — or use the `wikitext_render_in_app` tool variant, which wraps the render in a synthesized `<$statewrap>` so plain `statewrap-get` resolves
+* Any filter expression that knows the instid explicitly and doesn't need the convenience of the tree walk
+
+The lookup returns only the state tiddler's current text — it does not apply `default-<channel>` attributes (defaults are written to state tiddlers by `<$statewrap>` during its first render, so this matters only if the statewrap has never been rendered for that instid).
 
 !! State tiddler path format
 

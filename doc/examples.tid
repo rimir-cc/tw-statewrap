@@ -74,5 +74,18 @@ type: text/vnd.tiddlywiki
 <$action-statewrap-set channel="detail-tab" value="overview" no-rules="yes"/>
 ```
 
+!! Reading a channel from outside the statewrap scope
+
+`[statewrap-get[channel]]` requires a `<$statewrap>` ancestor in the widget tree. In contexts where no such ancestor exists (`\function` bodies, introspection templates rendered as page-template overlays, tool wikitext rendered detached via `$tw.fakeDocument`), use `[<instid>statewrap-lookup[channel]]` instead — it reads the state tiddler directly given the instid:
+
+```
+\function active-section() [[my-app]statewrap-lookup[section]]
+
+<!-- equivalent to reading $:/state/rimir/statewrap/my-app/section -->
+Current section: <$text text={{{[function[active-section]]}}}/>
+```
+
+This is particularly useful for LLM-facing templates and tools that need to report the current app state without being embedded in the app's render tree.
+
 </$fill>
 </$transclude>
