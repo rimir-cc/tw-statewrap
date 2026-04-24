@@ -69,7 +69,7 @@ $:/state/rimir/statewrap/<instid>/<channel-name>
 
 * ''Missing context'' — action widget and filter operators silently no-op if no `<$statewrap>` ancestor exists
 * ''Unknown channel'' — logs a console warning, no-op
-* ''No cascading'' — `_applyingRules` flag prevents rules from triggering further rules
+* ''Cascade cap'' — rule writes trigger matching downstream rules transitively. A depth counter on the statewrap context bounds cascades at 10 levels; further nested writes still persist but stop firing rules. Suppress per-write with `no-rules="yes"`.
 * ''Shared instid'' — two `<$statewrap>` with the same `instid` share state tiddlers (intentional for cross-widget communication)
 * ''Nested statewrap'' — child widgets find the nearest ancestor context
 

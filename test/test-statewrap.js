@@ -167,11 +167,11 @@ describe("statewrap", function() {
 			expect(wiki.getTiddler("$:/state/rimir/statewrap/rule2/task").fields.text).toBe("keep-this");
 		});
 
-		it("should prevent cascading rules (re-entry guard)", function() {
+		it("should cascade rules transitively", function() {
 			var wiki = setupWiki([]);
 			// Rule A: when project changes → set task
 			// Rule B: when task changes → set detail
-			// Changing project should trigger rule A (set task) but rule B should NOT fire
+			// Changing project should trigger rule A, whose write should in turn trigger rule B
 			var text = '<$statewrap channels="project task detail" instid="rule3">' +
 				'<$statewrap-rule when="project">' +
 				'<$action-statewrap-set channel="task" value="auto-task"/>' +
@@ -188,8 +188,7 @@ describe("statewrap", function() {
 
 			expect(wiki.getTiddler("$:/state/rimir/statewrap/rule3/project").fields.text).toBe("X");
 			expect(wiki.getTiddler("$:/state/rimir/statewrap/rule3/task").fields.text).toBe("auto-task");
-			// detail should NOT be set by cascading rule
-			expect(wiki.getTiddler("$:/state/rimir/statewrap/rule3/detail").fields.text).toBe("");
+			expect(wiki.getTiddler("$:/state/rimir/statewrap/rule3/detail").fields.text).toBe("auto-detail");
 		});
 	});
 

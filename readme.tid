@@ -12,7 +12,7 @@ Channel-based state management for TiddlyWiki. Define named state channels in a 
 * ''Named channels'' — views reference logical names like `selected-project`, not `$:/state/...` paths
 * ''Reactive rules'' — declarative wikitext actions fire when a channel changes (e.g., "when project changes, clear task selection")
 * ''Instance isolation'' — each `<$statewrap>` gets its own state namespace via `instid` or TW's qualify mechanism
-* ''Re-entry guard'' — rules cannot cascade (a rule's actions won't trigger further rules)
+* ''Cascading rules'' — a rule's writes trigger matching downstream rules (e.g. section → entities → details), bounded by a depth cap (10) to prevent infinite loops. Suppress with `no-rules="yes"` on `<$action-statewrap-set>`.
 * ''Filter operators'' — `[statewrap-get[channel]]` reads value, `[statewrap-ref[channel]]` returns state tiddler path, `[<instid>statewrap-lookup[channel]]` reads a channel's value without needing a parent `<$statewrap>` scope (for use in `\function` bodies, detached rendering, and introspection tools)
 
 !! Quick start

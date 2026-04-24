@@ -23,7 +23,7 @@ Provides named state channels as an abstraction over `$:/state/...` tiddlers. Vi
 * Named channels — views reference names like `selected-project`, not state tiddler paths
 * Reactive rules — declarative wikitext actions fire when a channel changes
 * Instance isolation — each `<$statewrap>` gets its own state namespace
-* Re-entry guard — rules cannot cascade (prevents infinite loops)
+* Cascading rules — a rule's writes trigger matching downstream rules transitively, bounded by a depth cap (10) to prevent infinite loops; suppressed per-action with `no-rules="yes"`
 * Filter operators — tree-dependent `[statewrap-get[channel]]` / `[statewrap-ref[channel]]` for in-scope use, and tree-independent `[<instid>statewrap-lookup[channel]]` for reading a channel's value from outside the `<$statewrap>` (e.g. in `\function` bodies or introspection tools)
 
 !! Prerequisites
