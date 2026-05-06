@@ -36,6 +36,26 @@ Must be a descendant of `<$statewrap>` (any nesting depth). Contains action widg
 |`value` |No |Value to set (defaults to `""`) |
 |`no-rules` |No |`"yes"` to skip reactive rules |
 
+!!! `<$action-statewrap-navigate>`
+
+Snapshots the current channel values into a history stack, then writes new channel values — typed link with breadcrumb support.
+
+|!Attribute |!Required |!Description |
+|`history` |Yes |State tiddler holding the JSON history stack |
+|`label` |Yes |Label for this entry in the breadcrumb |
+|`set-<channel>` |No |Target value for `<channel>`. Multiple `set-*` attributes are applied in declaration order |
+|`set-channel` / `set-value` |No |Dynamic single-target form when the channel name isn't known statically |
+
+The history stack is capped at 10 entries (oldest dropped). Consecutive duplicate snapshots — same `label` and identical channel values — are not pushed, so repeated clicks on the same link don't stack identical breadcrumb entries. Channel writes still fire either way.
+
+!!! `<$action-statewrap-back>`
+
+Pops the most recent history entry and restores its channel snapshot. Reactive rules are suppressed during the restore so the snapshot is reinstated as-is.
+
+|!Attribute |!Required |!Description |
+|`history` |Yes |State tiddler holding the JSON history stack (must match the `navigate` widget) |
+|`index` |No |Jump to a specific entry instead of popping (truncates everything after it). Used by breadcrumb buttons |
+
 !! Filter operator reference
 
 !!! `[statewrap-get[channel]]`

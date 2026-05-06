@@ -81,16 +81,33 @@ ActionStatewrapNavigate.prototype.invokeAction = function(triggeringWidget, even
 		try { stack = JSON.parse(existingTiddler.fields.text); } catch(e) { stack = []; }
 	}
 
-	// Push snapshot
-	stack.push({ label: label, channels: snapshot });
-
-	// Cap at MAX_HISTORY
-	if(stack.length > MAX_HISTORY) {
-		stack = stack.slice(stack.length - MAX_HISTORY);
+	// Skip push if the new snapshot duplicates the top of the stack
+	// (same label and identical channel values) — prevents repeated clicks
+	// on the same link from stacking consecutive duplicate breadcrumb
+	// entries.
+	var isDuplicateOfTop = false;
+	if(stack.length > 0) {
+		var top = stack[stack.length - 1];
+		if(top && top.label === label && top.channels) {
+			isDuplicateOfTop = true;
+			for(var sk in snapshot) {
+				if(snapshot[sk] !== top.channels[sk]) { isDuplicateOfTop = false; break; }
+			}
+			if(isDuplicateOfTop) {
+				for(var tk in top.channels) {
+					if(top.channels[tk] !== snapshot[tk]) { isDuplicateOfTop = false; break; }
+				}
+			}
+		}
 	}
 
-	// Write history
-	ctx.wiki.setText(historyTiddler, "text", null, JSON.stringify(stack));
+	if(!isDuplicateOfTop) {
+		stack.push({ label: label, channels: snapshot });
+		if(stack.length > MAX_HISTORY) {
+			stack = stack.slice(stack.length - MAX_HISTORY);
+		}
+		ctx.wiki.setText(historyTiddler, "text", null, JSON.stringify(stack));
+	}
 
 	// Collect target channel values from attributes
 	var targets = {};

@@ -6,6 +6,7 @@ type: text/vnd.tiddlywiki
 ! Changelog
 
 |!Version |!Date |!Changes |
+|0.1.6 |2026-05-04 |`$action-statewrap-navigate` no longer pushes a duplicate breadcrumb entry when the new snapshot's label and channel values match the top of the history stack. Prevents repeated clicks on the same link from stacking consecutive identical entries. Channel-set targets still fire as before |
 |0.1.5 |2026-04-27 |Declare hard dependent `theme` and `doc-template` as soft-dependent in plugin.info |
 |0.1.4 |2026-04-22 |New filter operator `[<instid>statewrap-lookup[channel]]` — tree-independent channel read. Takes the instid as filter input instead of walking up to find a `<$statewrap>` ancestor, so it works in `\function` bodies, detached wikitext rendering, and introspection templates. Reads the state tiddler at `$:/state/rimir/statewrap/<instid>/<channel>` directly. Docs updated (readme, overview, reference, examples) |
 |0.1.3 |2026-04-10 |Navigation history: `$action-statewrap-navigate` (snapshot channels + push to history stack, set targets in declaration order, `set-channel`/`set-value` for dynamic names, cap at 10) and `$action-statewrap-back` (pop/restore with rules suppressed, optional `index` for breadcrumb jumps) |
