@@ -6,6 +6,7 @@ type: text/vnd.tiddlywiki
 ! Changelog
 
 |!Version |!Date |!Changes |
+|0.1.7 |2026-05-17 |Test coverage push: 4 new specs for `statewrap-lookup` (the tree-independent filter for reading channel values from outside a `<$statewrap>` scope) — reads by explicit instid; empty result when state tiddler is missing; short-circuits when channel operand is empty; iterates over multiple instids via `:map`. Plugin coverage 46.6% → 49.7% lines / 61% → 65.9% functions. Remaining residuals are `action-statewrap-navigate` and `action-statewrap-back` — both interact with the appify navigator's history stack, deferred to Tier B/D (Playwright). |
 |0.1.6 |2026-05-04 |`$action-statewrap-navigate` no longer pushes a duplicate breadcrumb entry when the new snapshot's label and channel values match the top of the history stack. Prevents repeated clicks on the same link from stacking consecutive identical entries. Channel-set targets still fire as before |
 |0.1.5 |2026-04-27 |Declare hard dependent `theme` and `doc-template` as soft-dependent in plugin.info |
 |0.1.4 |2026-04-22 |New filter operator `[<instid>statewrap-lookup[channel]]` — tree-independent channel read. Takes the instid as filter input instead of walking up to find a `<$statewrap>` ancestor, so it works in `\function` bodies, detached wikitext rendering, and introspection templates. Reads the state tiddler at `$:/state/rimir/statewrap/<instid>/<channel>` directly. Docs updated (readme, overview, reference, examples) |

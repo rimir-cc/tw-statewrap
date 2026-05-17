@@ -227,6 +227,41 @@ describe("statewrap", function() {
 			var textContent = result.container.textContent || "";
 			expect(textContent).not.toContain("$:/state");
 		});
+
+		it("statewrap-lookup reads a channel by explicit instid (tree-independent)", function() {
+			// statewrap-lookup is the escape hatch for places where the widget
+			// tree can't reach a <$statewrap> scope — \function bodies, detached
+			// rendering. Pass the instid as filter input rather than walking up.
+			var wiki = setupWiki([
+				{title: "$:/state/rimir/statewrap/lookup1/tab", text: "settings"}
+			]);
+			var r = wiki.filterTiddlers("[[lookup1]statewrap-lookup[tab]]");
+			expect(r).toEqual(["settings"]);
+		});
+
+		it("statewrap-lookup returns empty when the state tiddler doesn't exist", function() {
+			var wiki = setupWiki([]);
+			var r = wiki.filterTiddlers("[[ghost-instid]statewrap-lookup[tab]]");
+			expect(r).toEqual([""]);
+		});
+
+		it("statewrap-lookup returns empty when channel operand is missing", function() {
+			var wiki = setupWiki([
+				{title: "$:/state/rimir/statewrap/x/tab", text: "value"}
+			]);
+			// No channel-name operand — should short-circuit cleanly.
+			var r = wiki.filterTiddlers("[[x]statewrap-lookup[]]");
+			expect(r).toEqual([]);
+		});
+
+		it("statewrap-lookup iterates over multiple instids in the input", function() {
+			var wiki = setupWiki([
+				{title: "$:/state/rimir/statewrap/inst-a/tab", text: "home"},
+				{title: "$:/state/rimir/statewrap/inst-b/tab", text: "settings"}
+			]);
+			var r = wiki.filterTiddlers("[[inst-a]] [[inst-b]] :map[<currentTiddler>statewrap-lookup[tab]]");
+			expect(r).toEqual(["home", "settings"]);
+		});
 	});
 
 	// Helper: recursively find a widget by type in the widget tree
